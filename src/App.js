@@ -1,24 +1,24 @@
-import logo from './logo.svg';
 import './App.css';
-
+import { Users } from "./pages/Users";
+import { useState, createContext, useContext } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { NoPage } from "./pages/NoPage";
+import { Tasks } from "./pages/Tasks";
+export const DataContext = createContext();
 function App() {
+  const [data, changeData] = useState([]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <DataContext.Provider value={{data,changeData}}>
+      <div className="App">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Users />} />
+            <Route path="/:id" element={<Tasks />} />
+            <Route path="*" element={<NoPage />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </DataContext.Provider>
   );
 }
 
