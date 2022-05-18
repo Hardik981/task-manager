@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom'
-import { useState, useContext, useRef,useEffect } from 'react';
+import { useState, useContext, useRef, useEffect } from 'react';
 import { DataContext } from '../App';
 export function Tasks() {
     const location = useLocation();
@@ -9,24 +9,41 @@ export function Tasks() {
     const inputFilter = useRef({});
     const [onFilters, changeOnFilters] = useState(false);
     const [showData, setShowData] = useState([]);
-    const listNames = setData.data[location.state.index].tasks.map((data) =>
-        <div style={{ display: 'flex', justifyContent: 'space-evenly' }}><div>{data.taskName}</div><div>{data.status}</div><div>{data.dueDate}</div></div>
+    const nameRefs = useRef([]);
+    const listData = setData.data[location.state.index].tasks.map((data, index) =>
+        <div style={{ display: 'flex', justifyContent: 'space-evenly' }}><div contentEditable="false" ref={(element) => { nameRefs.current[index] = element }}>{data.taskName}</div><div>{data.status}</div><div>{data.dueDate}</div><button onClick={() => editName(index)}>Edit</button>
+            <button onClick={() => removeItem(index)}>Remove</button></div>
     )
+    useEffect(() => {
+        console.log("Done: ", showData)
+    }, [showData]);
+    function editName(index) {
+        nameRefs.current[index].contentEditable = "true";
+        nameRefs.current[index].focus();
+    }
+    function removeItem(index) {
+        let temp = [...setData.data];
+        console.log("🚀 ~ file: Tasks.js ~ line 26 ~ removeItem ~ setData.data", setData.data)
+        temp[location.state.index].tasks.splice(index, 1);
+        setData.changeData(temp);
+    }
     function filterData(e) {
         e.preventDefault();
-        setShowData();
-        changeOnFilters(true);
+        let temp = [];
+        let count = 0;
         setData.data[location.state.index].tasks.map(function (data) {
-            data.taskName === inputFilter.current.input.value && data.status === inputFilter.current.status.value ? console.log("Same") : console.log("Not Same");
-            if (data.taskName.slice(0, inputFilter.current.input.value.length) === inputFilter.current.input.value && data.status === inputFilter.current.status.value && data.dueDate === inputFilter.current.date.value) {
-                setShowData([...showData, <div style={{ display: 'flex', justifyContent: 'space-evenly' }}><div>{data.taskName}</div><div>{data.status}</div><div>{data.dueDate}</div></div>,])
+            if (data.taskName.startsWith(inputFilter.current.input.value) && data.status === inputFilter.current.status.value && data.dueDate === inputFilter.current.date.value) {
+                temp.push(<div style={{ display: 'flex', justifyContent: 'space-evenly' }}><div contentEditable="false" ref={(element) => { nameRefs.current[count] = element }}>{data.taskName}</div><div>{data.status}</div><div>{data.dueDate}</div><button onClick={() => editName(count)}>Edit</button></div>);
+                count++;
             }
         })
+        setShowData(temp);
+        changeOnFilters(true);
     }
     return (
         <>
             <h3>{location.state?.name} Task</h3>
-            {state ? <Btn send={setState} /> : <AddTask send={{ setState, changeOnFilters}} />}
+            {state ? <Btn send={setState} /> : <AddTask send={{ setState, changeOnFilters }} />}
             <h3 onClick={() => setShowFilter(true)}>Filters</h3>
             {showFilters &&
                 <form onSubmit={filterData}>
@@ -40,7 +57,7 @@ export function Tasks() {
                     <input type="submit" />
                 </form>
             }
-            {onFilters ? <div>{showData}</div> : <div>{ listNames }</div>}
+            {onFilters ? <><h3>Filtered Tasks</h3><div>{showData}</div></> : <><h3>All Tasks</h3><div>{listData}</div></>}
         </>
     )
 }
@@ -54,6 +71,9 @@ function AddTask(props) {
     const location = useLocation();
     const setData = useContext(DataContext);
     const getInputData = useRef({});
+    useEffect(() => {
+        getInputData.current.taskName.focus();
+    }, []);
     function setInputData(e) {
         /* let getName = setData.data[location.state.index].name; */
         e.preventDefault();

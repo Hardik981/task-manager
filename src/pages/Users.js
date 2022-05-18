@@ -1,10 +1,9 @@
-import { useState, useContext, useRef } from 'react';
+import { useState, useContext, useRef,useEffect } from 'react';
 import { DataContext } from '../App';
 import { Link } from "react-router-dom";
 export function Users() {
     const [state, setState] = useState(true);
     const setData = useContext(DataContext);
-    const nameRefs = useRef([]);
     const listNames = setData.data.map(function (data, index) {
         let sendData = {
             name: data.name,
@@ -12,17 +11,12 @@ export function Users() {
         }
         return (
             <div style={{ display: 'flex', justifyContent: 'space-evenly', margin: '20px 0px' }}>
-                <Link to={`/${data.name}`} state={sendData} contentEditable="false" ref={(element) => { nameRefs.current[index] = element }}>{data.name}</Link>
-                <button onClick={() => editName(index)}>Edit</button>
+                <Link to={`/${data.name}`} state={sendData}>{data.name}</Link>
                 <button onClick={() => removeItem(index)}>Remove</button>
             </div>
         )
     }
     );
-    function editName(index) {
-        nameRefs.current[index].contentEditable = "true";
-        nameRefs.current[index].focus();
-    }
     function removeItem(index) {
         let temp = [...setData.data];
         temp.splice(index, 1);
@@ -45,6 +39,9 @@ function Btn(props) {
 function TakeUser(props) {
     const inputData = useRef();
     const setData = useContext(DataContext);
+    useEffect(() => {
+        inputData.current.focus();
+    }, []);
     function setInputData(e) {
         e.preventDefault();
         setData.changeData([...setData.data, { name: inputData.current.value, tasks: [] },])
