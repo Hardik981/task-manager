@@ -1,6 +1,6 @@
 {
-  "homepage": "https://Hardik981.github.io/task-manager",
   "name": "task-manager",
+  "homepage": "https://Hardik981.github.io/task-manager",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
