@@ -46,7 +46,7 @@ export function Tasks() {
         let temp = [];
         let count = 0;
         setData.data[location.state.index].tasks.map(function (data) {
-            if ((data.taskName.startsWith(inputFilter.current.input.value) || data.dueDate === inputFilter.current.date.value) && data.status === inputFilter.current.status.value) {
+            if (data.taskName.startsWith(inputFilter.current.input.value) && data.dueDate === inputFilter.current.date.value && data.status === inputFilter.current.status.value) {
                 temp.push(<div style={{ display: 'flex', justifyContent: 'space-evenly' }}><div contentEditable="false" ref={(element) => { nameRefs.current[count] = element }}>{data.taskName}</div><div>{data.status}</div><div>{data.dueDate}</div><button onClick={() => editName(count)}>Edit</button><button onClick={() => removeFilterItem(count)}>Edit</button></div>);
                 count++;
             }
