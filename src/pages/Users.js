@@ -46,7 +46,6 @@ function TakeUser(props) {
         e.preventDefault();
         setData.changeData([...setData.data, { name: inputData.current.value, tasks: [] },])
         props.send(true);
-        console.log(setData.data);
     }
     return (
         <>
