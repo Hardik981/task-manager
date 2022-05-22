@@ -29,6 +29,7 @@ export function Tasks() {
     function removeFilterItem(index) {
         setPutArray(true);
         setGetCount(index);
+        console.log("🚀 ~ file: Tasks.js ~ line 32 ~ removeFilterItem ~ index", index)
     }
     function setTempArray() {
         setShowData(tempArray.current);
@@ -37,18 +38,17 @@ export function Tasks() {
         if (putArray) {
             tempArray.current = [...showData];
             tempArray.current.splice(getCount, 1);
+            console.log("🚀 ~ file: Tasks.js ~ line 40 ~ useEffect ~ getCount", getCount)
             setTempArray();
             setPutArray(false);
         }
-    }, [showData]);
+    }, [showData,putArray,getCount]);
     function filterData(e) {
         e.preventDefault();
         let temp = [];
-        let count = 0;
-        setData.data[location.state.index].tasks.map(function (data) {
+        setData.data[location.state.index].tasks.map(function (data,index) {
             if (data.taskName.startsWith(inputFilter.current.input.value) && data.dueDate === inputFilter.current.date.value && data.status === inputFilter.current.status.value) {
-                temp.push(<div style={{ display: 'flex', justifyContent: 'space-evenly' }}><div contentEditable="false" ref={(element) => { nameRefs.current[count] = element }}>{data.taskName}</div><div>{data.status}</div><div>{data.dueDate}</div><button onClick={() => editName(count)}>Edit</button><button onClick={() => removeFilterItem(count)}>Edit</button></div>);
-                count++;
+                temp.push(<div style={{ display: 'flex', justifyContent: 'space-evenly' }}><div contentEditable="false" ref={(element) => { nameRefs.current[index] = element }}>{data.taskName}</div><div>{data.status}</div><div>{data.dueDate}</div><button onClick={() => editName(index)}>Edit</button><button onClick={() => removeFilterItem(index)}>Remove</button></div>);
             }
         })
         setShowData(temp);
