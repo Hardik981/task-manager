@@ -18,7 +18,7 @@ export function Tasks() {
         let temp = [];
         setData.data[location.state.index].tasks.map(function (data, index) {
             if (filterState) {
-                if (data.taskName.startsWith(inputFilter.current.input.value) && data.dueDate === inputFilter.current.date.value && data.status === inputFilter.current.status.value) {
+                if ((data.taskName.toLowerCase().startsWith(inputFilter.current.input.value.toLowerCase()) || data.dueDate === inputFilter.current.date.value) && data.status === inputFilter.current.status.value) {
                     temp.push(<div style={{ display: 'flex', justifyContent: 'space-evenly' }}><div contentEditable="false" ref={(element) => { nameRefs.current[index] = element }}>{data.taskName}</div><div>{data.status}</div><div>{data.dueDate}</div><button onClick={() => editName(index)}>Edit</button><button onClick={() => removeItem(index)}>Remove</button></div>);
                 }
             }
@@ -87,7 +87,8 @@ function AddTask(props) {
     function setInputData(e) {
         e.preventDefault();
         let temp = [...setData.data];
-        temp[location.state.index].tasks.push({ taskName: getInputData.current.taskName.value, status: getInputData.current.status.value, dueDate: getInputData.current.date.value })
+        const dateValue = getInputData.current.date.value === '' ? "Not Set" : getInputData.current.date.value;
+        temp[location.state.index].tasks.push({ taskName: getInputData.current.taskName.value, status: getInputData.current.status.value, dueDate: dateValue })
         setData.changeData(temp);
         console.log("🚀 ~ file: Tasks.js ~ line 33 ~ se tInputData ~ setData", setData?.data)
         props.send.setState(true);
