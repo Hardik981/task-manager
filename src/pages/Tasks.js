@@ -7,16 +7,27 @@ export function Tasks() {
     const [state, setState] = useState(true);
     const [showFilters, setShowFilter] = useState(false);
     const inputFilter = useRef({});
-    const [onFilters, changeOnFilters] = useState(false);
     const [showData, setShowData] = useState([]);
     const nameRefs = useRef([]);
-    const tempArray = useRef();
-    const [putArray, setPutArray] = useState(false);
-    const [getCount, setGetCount] = useState();
-    const listData = setData.data[location.state.index].tasks.map((data, index) =>
-        <div style={{ display: 'flex', justifyContent: 'space-evenly' }}><div contentEditable="false" ref={(element) => { nameRefs.current[index] = element }}>{data.taskName}</div><div>{data.status}</div><div>{data.dueDate}</div><button onClick={() => editName(index)}>Edit</button>
-            <button onClick={() => removeItem(index)}>Remove</button></div>
-    )
+    const [filterState, setFilterState] = useState(false);
+    const [updateData, setUpdateData] = useState(0);
+    useEffect(() => {
+        displayData();
+    },[updateData]);
+    function displayData() {
+        let temp = [];
+        setData.data[location.state.index].tasks.map(function (data, index) {
+            if (filterState) {
+                if (data.taskName.startsWith(inputFilter.current.input.value) && data.dueDate === inputFilter.current.date.value && data.status === inputFilter.current.status.value) {
+                    temp.push(<div style={{ display: 'flex', justifyContent: 'space-evenly' }}><div contentEditable="false" ref={(element) => { nameRefs.current[index] = element }}>{data.taskName}</div><div>{data.status}</div><div>{data.dueDate}</div><button onClick={() => editName(index)}>Edit</button><button onClick={() => removeItem(index)}>Remove</button></div>);
+                }
+            }
+            else {
+                temp.push(<div style={{ display: 'flex', justifyContent: 'space-evenly' }}><div contentEditable="false" ref={(element) => { nameRefs.current[index] = element }}>{data.taskName}</div><div>{data.status}</div><div>{data.dueDate}</div><button onClick={() => editName(index)}>Edit</button><button onClick={() => removeItem(index)}>Remove</button></div>)
+            }
+        })
+        setShowData(temp);
+    }
     function editName(index) {
         nameRefs.current[index].contentEditable = "true";
         nameRefs.current[index].focus();
@@ -25,39 +36,21 @@ export function Tasks() {
         let temp = [...setData.data];
         temp[location.state.index].tasks.splice(index, 1);
         setData.changeData(temp);
+        setUpdateData(updateData + 1);
     }
-    function removeFilterItem(index) {
-        setPutArray(true);
-        setGetCount(index);
-        console.log("🚀 ~ file: Tasks.js ~ line 32 ~ removeFilterItem ~ index", index)
-    }
-    function setTempArray() {
-        setShowData(tempArray.current);
-    }
-    useEffect(() => {
-        if (putArray) {
-            tempArray.current = [...showData];
-            tempArray.current.splice(getCount, 1);
-            console.log("🚀 ~ file: Tasks.js ~ line 40 ~ useEffect ~ getCount", getCount)
-            setTempArray();
-            setPutArray(false);
-        }
-    }, [showData,putArray,getCount]);
     function filterData(e) {
         e.preventDefault();
-        let temp = [];
-        setData.data[location.state.index].tasks.map(function (data,index) {
-            if (data.taskName.startsWith(inputFilter.current.input.value) && data.dueDate === inputFilter.current.date.value && data.status === inputFilter.current.status.value) {
-                temp.push(<div style={{ display: 'flex', justifyContent: 'space-evenly' }}><div contentEditable="false" ref={(element) => { nameRefs.current[index] = element }}>{data.taskName}</div><div>{data.status}</div><div>{data.dueDate}</div><button onClick={() => editName(index)}>Edit</button><button onClick={() => removeFilterItem(index)}>Remove</button></div>);
-            }
-        })
-        setShowData(temp);
-        changeOnFilters(true);
+        setUpdateData(updateData + 1);
+        setFilterState(true);
+    }
+    function displayAll() {
+        setUpdateData(updateData + 1);
+        setFilterState(false)
     }
     return (
         <>
             <h3>{location.state?.name} Task</h3>
-            {state ? <Btn send={setState} /> : <AddTask send={{ setState, changeOnFilters }} />}
+            {state ? <Btn send={setState} /> : <AddTask send={{ setState, setUpdateData, updateData, setFilterState }} />}
             <h3 onClick={() => setShowFilter(true)}>Filters</h3>
             {showFilters &&
                 <>
@@ -71,10 +64,10 @@ export function Tasks() {
                         <input type="date" ref={(element) => inputFilter.current.date = element} />
                         <input type="submit" />
                     </form>
-                    <br /><button onClick={() => changeOnFilters(false)}>Display All</button>
+                <br /><button onClick={displayAll}>Display All</button>
                 </>
             }
-            {onFilters ? <><h3>Filtered Tasks</h3><div>{showData}</div></> : <><h3>All Tasks</h3><div>{listData}</div></>}
+            <><h3>Results</h3><div>{showData}</div></>
         </>
     )
 }
@@ -98,7 +91,8 @@ function AddTask(props) {
         setData.changeData(temp);
         console.log("🚀 ~ file: Tasks.js ~ line 33 ~ se tInputData ~ setData", setData?.data)
         props.send.setState(true);
-        props.send.changeOnFilters(false);
+        props.send.setUpdateData(props.send.updateData + 1);
+        props.send.setFilterState(false);
     }
     return (
         <form onSubmit={setInputData}>
