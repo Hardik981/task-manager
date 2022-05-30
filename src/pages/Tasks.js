@@ -1,6 +1,8 @@
 import { useLocation } from 'react-router-dom'
 import { useState, useContext, useRef, useEffect } from 'react';
 import { DataContext } from '../App';
+import EdiText from 'react-editext'
+
 export function Tasks() {
     const location = useLocation();
     const setData = useContext(DataContext);
@@ -8,29 +10,30 @@ export function Tasks() {
     const [showFilters, setShowFilter] = useState(false);
     const inputFilter = useRef({});
     const [showData, setShowData] = useState([]);
-    const nameRefs = useRef([]);
     const [filterState, setFilterState] = useState(false);
     const [updateData, setUpdateData] = useState(0);
     useEffect(() => {
         displayData();
     },[updateData]);
+    function changeDataOnSave(value,index){
+        let temp = [...setData.data];
+        temp[location.state.index].tasks[index].taskName = value;
+        setData.changeData(temp);
+        console.log("🚀 ~ file: Tasks.js ~ line 22 ~ se tInputData ~ setData", setData?.data);
+    }
     function displayData() {
         let temp = [];
         setData.data[location.state.index].tasks.map(function (data, index) {
             if (filterState) {
                 if ((data.taskName.toLowerCase().startsWith(inputFilter.current.input.value.toLowerCase()) || data.dueDate === inputFilter.current.date.value) && data.status === inputFilter.current.status.value) {
-                    temp.push(<div style={{ display: 'flex', justifyContent: 'space-evenly' }}><div contentEditable="false" ref={(element) => { nameRefs.current[index] = element }}>{data.taskName}</div><div>{data.status}</div><div>{data.dueDate}</div><button onClick={() => editName(index)}>Edit</button><button onClick={() => removeItem(index)}>Remove</button></div>);
+                    temp.push(<div style={{ display: 'flex', justifyContent: 'space-evenly' }}><EdiText type='text' value={data.taskName} onSave={v => changeDataOnSave(v,index)} /><div>{data.status}</div><div>{data.dueDate}</div><button onClick={() => removeItem(index)}>Remove</button></div>);
                 }
             }
             else {
-                temp.push(<div style={{ display: 'flex', justifyContent: 'space-evenly' }}><div contentEditable="false" ref={(element) => { nameRefs.current[index] = element }}>{data.taskName}</div><div>{data.status}</div><div>{data.dueDate}</div><button onClick={() => editName(index)}>Edit</button><button onClick={() => removeItem(index)}>Remove</button></div>)
+                temp.push(<div style={{ display: 'flex', justifyContent: 'space-evenly' }}><EdiText type='text' value={data.taskName} onSave={v => changeDataOnSave(v,index)} /><div>{data.status}</div><div>{data.dueDate}</div><button onClick={() => removeItem(index)}>Remove</button></div>);
             }
         })
         setShowData(temp);
-    }
-    function editName(index) {
-        nameRefs.current[index].contentEditable = "true";
-        nameRefs.current[index].focus();
     }
     function removeItem(index) {
         let temp = [...setData.data];
@@ -90,7 +93,7 @@ function AddTask(props) {
         const dateValue = getInputData.current.date.value === '' ? "Not Set" : getInputData.current.date.value;
         temp[location.state.index].tasks.push({ taskName: getInputData.current.taskName.value, status: getInputData.current.status.value, dueDate: dateValue })
         setData.changeData(temp);
-        console.log("🚀 ~ file: Tasks.js ~ line 33 ~ se tInputData ~ setData", setData?.data)
+        console.log("🚀 ~ file: Tasks.js ~ line 95 ~ se tInputData ~ setData", setData?.data);
         props.send.setState(true);
         props.send.setUpdateData(props.send.updateData + 1);
         props.send.setFilterState(false);
