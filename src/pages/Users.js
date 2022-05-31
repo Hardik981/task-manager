@@ -1,7 +1,13 @@
 import { useState, useContext, useRef, useEffect } from 'react';
 import { DataContext } from '../App';
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { addData } from '../redux/dataReducer';
 export function Users() {
+    const data = useSelector((state) => state.getData.data);
+    useEffect(() => {
+        console.log("🚀 ~ file: App.js ~ line 14 ~ App ~ count", data)
+    });
     const [state, setState] = useState(true);
     const setData = useContext(DataContext);
     const listNames = setData.data.map(function (data, index) {
@@ -38,12 +44,15 @@ function Btn(props) {
 function TakeUser(props) {
     const inputData = useRef();
     const setData = useContext(DataContext);
+    const data = useSelector((state) => state.getData.data);
+    const dispatch = useDispatch();
     useEffect(() => {
         inputData.current.focus();
     }, []);
     function setInputData(e) {
         e.preventDefault();
         setData.changeData([...setData.data, { name: inputData.current.value, tasks: [] },])
+        dispatch(addData([...data, { name: inputData.current.value, tasks: [] },]))
         props.send(true);
     }
     return (

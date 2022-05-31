@@ -4,10 +4,14 @@ import { useState, createContext } from "react";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { NoPage } from "./pages/NoPage";
 import { Tasks } from "./pages/Tasks";
+import store from './redux/store';
+import { Provider } from 'react-redux';
+
 export const DataContext = createContext();
 function App() {
   const [data, changeData] = useState([]);
   return (
+    <Provider store={store}>
     <DataContext.Provider value={{data,changeData}}>
       <div className="App">
         <HashRouter>
@@ -19,6 +23,7 @@ function App() {
         </HashRouter>
       </div>
     </DataContext.Provider>
+    </Provider>
   );
 }
 
