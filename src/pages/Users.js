@@ -1,4 +1,4 @@
-import { useState, useContext, useRef,useEffect } from 'react';
+import { useState, useContext, useRef, useEffect } from 'react';
 import { DataContext } from '../App';
 import { Link } from "react-router-dom";
 export function Users() {
@@ -15,8 +15,7 @@ export function Users() {
                 <button onClick={() => removeItem(index)}>Remove</button>
             </div>
         )
-    }
-    );
+    });
     function removeItem(index) {
         let temp = [...setData.data];
         temp.splice(index, 1);

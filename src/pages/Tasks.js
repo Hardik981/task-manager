@@ -21,16 +21,25 @@ export function Tasks() {
         setData.changeData(temp);
         console.log("🚀 ~ file: Tasks.js ~ line 22 ~ se tInputData ~ setData", setData?.data);
     }
+    function resultJSX(data,index){
+        return ( 
+        <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <EdiText type='text' value={data.taskName} onSave={v => changeDataOnSave(v,index)} />
+            <div>{data.status}</div>
+            <div>{data.dueDate}</div><button onClick={() => removeItem(index)}>Remove</button>
+            </div>
+        )
+    }
     function displayData() {
         let temp = [];
         setData.data[location.state.index].tasks.map(function (data, index) {
             if (filterState) {
                 if ((data.taskName.toLowerCase().startsWith(inputFilter.current.input.value.toLowerCase()) || data.dueDate === inputFilter.current.date.value) && data.status === inputFilter.current.status.value) {
-                    temp.push(<div style={{ display: 'flex', justifyContent: 'space-evenly' }}><EdiText type='text' value={data.taskName} onSave={v => changeDataOnSave(v,index)} /><div>{data.status}</div><div>{data.dueDate}</div><button onClick={() => removeItem(index)}>Remove</button></div>);
+                    temp.push(resultJSX(data,index));
                 }
             }
             else {
-                temp.push(<div style={{ display: 'flex', justifyContent: 'space-evenly' }}><EdiText type='text' value={data.taskName} onSave={v => changeDataOnSave(v,index)} /><div>{data.status}</div><div>{data.dueDate}</div><button onClick={() => removeItem(index)}>Remove</button></div>);
+                temp.push(resultJSX(data,index));
             }
         })
         setShowData(temp);
