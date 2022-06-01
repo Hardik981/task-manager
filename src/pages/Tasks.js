@@ -1,53 +1,53 @@
 import { useLocation } from 'react-router-dom'
-import { useState, useContext, useRef, useEffect } from 'react';
-import { DataContext } from '../App';
+import { useState, useRef, useEffect } from 'react';
 import EdiText from 'react-editext'
-
+import { useSelector, useDispatch } from 'react-redux';
+import { addTask, changeTask, deleteTask } from '../redux/dataReducer';
 export function Tasks() {
     const location = useLocation();
-    const setData = useContext(DataContext);
     const [state, setState] = useState(true);
     const [showFilters, setShowFilter] = useState(false);
     const inputFilter = useRef({});
     const [showData, setShowData] = useState([]);
     const [filterState, setFilterState] = useState(false);
     const [updateData, setUpdateData] = useState(0);
+    const data = useSelector((state) => state.getData.data);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        console.log("🚀 ~ file: App.js ~ line 19 ~ Tasks ~ count", data)
+    });
     useEffect(() => {
         displayData();
-    },[updateData]);
-    function changeDataOnSave(value,index){
-        let temp = [...setData.data];
-        temp[location.state.index].tasks[index].taskName = value;
-        setData.changeData(temp);
-        console.log("🚀 ~ file: Tasks.js ~ line 22 ~ se tInputData ~ setData", setData?.data);
+        console.log("🚀 ~ file: App.js ~ line 23 ~ Tasks ~ count", data)
+    }, [updateData]);
+    function changeDataOnSave(value, index) {
+        dispatch(changeTask({ userIndex: location.state.index, index: index, value: value }));
     }
-    function resultJSX(data,index){
-        return ( 
-        <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-            <EdiText type='text' value={data.taskName} onSave={v => changeDataOnSave(v,index)} />
-            <div>{data.status}</div>
-            <div>{data.dueDate}</div><button onClick={() => removeItem(index)}>Remove</button>
+    function resultJSX(data, index) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                <EdiText type='text' value={data.taskName} onSave={v => changeDataOnSave(v, index)} />
+                <div>{data.status}</div>
+                <div>{data.dueDate}</div><button onClick={() => removeItem(index)}>Remove</button>
             </div>
         )
     }
     function displayData() {
         let temp = [];
-        setData.data[location.state.index].tasks.map(function (data, index) {
+        data[location.state.index].tasks.map(function (data, index) {
             if (filterState) {
                 if ((data.taskName.toLowerCase().startsWith(inputFilter.current.input.value.toLowerCase()) || data.dueDate === inputFilter.current.date.value) && data.status === inputFilter.current.status.value) {
-                    temp.push(resultJSX(data,index));
+                    temp.push(resultJSX(data, index));
                 }
             }
             else {
-                temp.push(resultJSX(data,index));
+                temp.push(resultJSX(data, index));
             }
         })
         setShowData(temp);
     }
     function removeItem(index) {
-        let temp = [...setData.data];
-        temp[location.state.index].tasks.splice(index, 1);
-        setData.changeData(temp);
+        dispatch(deleteTask({ userIndex: location.state.index, index: index }));
         setUpdateData(updateData + 1);
     }
     function filterData(e) {
@@ -76,7 +76,7 @@ export function Tasks() {
                         <input type="date" ref={(element) => inputFilter.current.date = element} />
                         <input type="submit" />
                     </form>
-                <br /><button onClick={displayAll}>Display All</button>
+                    <br /><button onClick={displayAll}>Display All</button>
                 </>
             }
             <><h3>Results</h3><div>{showData}</div></>
@@ -91,18 +91,14 @@ function Btn(props) {
 }
 function AddTask(props) {
     const location = useLocation();
-    const setData = useContext(DataContext);
     const getInputData = useRef({});
+    const dispatch = useDispatch();
     useEffect(() => {
         getInputData.current.taskName.focus();
     }, []);
     function setInputData(e) {
         e.preventDefault();
-        let temp = [...setData.data];
-        const dateValue = getInputData.current.date.value === '' ? "Not Set" : getInputData.current.date.value;
-        temp[location.state.index].tasks.push({ taskName: getInputData.current.taskName.value, status: getInputData.current.status.value, dueDate: dateValue })
-        setData.changeData(temp);
-        console.log("🚀 ~ file: Tasks.js ~ line 95 ~ se tInputData ~ setData", setData?.data);
+        dispatch(addTask({ userIndex: [location.state.index], taskName: getInputData.current.taskName.value, status: getInputData.current.status.value, dueDate: getInputData.current.date.value }));
         props.send.setState(true);
         props.send.setUpdateData(props.send.updateData + 1);
         props.send.setFilterState(false);

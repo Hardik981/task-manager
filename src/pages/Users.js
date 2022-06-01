@@ -1,16 +1,12 @@
-import { useState, useContext, useRef, useEffect } from 'react';
-import { DataContext } from '../App';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { addData } from '../redux/dataReducer';
+import { addUser, deleteUser } from '../redux/dataReducer';
 export function Users() {
     const data = useSelector((state) => state.getData.data);
-    useEffect(() => {
-        console.log("🚀 ~ file: App.js ~ line 14 ~ App ~ count", data)
-    });
+    const dispatch = useDispatch();
     const [state, setState] = useState(true);
-    const setData = useContext(DataContext);
-    const listNames = setData.data.map(function (data, index) {
+    const listNames = data.map(function (data, index) {
         let sendData = {
             name: data.name,
             index: index
@@ -23,9 +19,7 @@ export function Users() {
         )
     });
     function removeItem(index) {
-        let temp = [...setData.data];
-        temp.splice(index, 1);
-        setData.changeData(temp);
+        dispatch(deleteUser(index));
     }
     return (
         <>
@@ -43,7 +37,6 @@ function Btn(props) {
 }
 function TakeUser(props) {
     const inputData = useRef();
-    const setData = useContext(DataContext);
     const data = useSelector((state) => state.getData.data);
     const dispatch = useDispatch();
     useEffect(() => {
@@ -51,8 +44,7 @@ function TakeUser(props) {
     }, []);
     function setInputData(e) {
         e.preventDefault();
-        setData.changeData([...setData.data, { name: inputData.current.value, tasks: [] },])
-        dispatch(addData([...data, { name: inputData.current.value, tasks: [] },]))
+        dispatch(addUser(inputData.current.value));
         props.send(true);
     }
     return (
