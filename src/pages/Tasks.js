@@ -7,7 +7,6 @@ const { v4: uuidv4 } = require('uuid');
 export function Tasks() {
     const location = useLocation();
     const [state, setState] = useState(true);
-    const [showFilters, setShowFilter] = useState(false);
     const inputFilter = useRef({});
     const [showData, setShowData] = useState([]);
     const [filterState, setFilterState] = useState(false);
@@ -59,24 +58,20 @@ export function Tasks() {
     return (
         <>
             <h3>{location.state?.name} Task</h3>
-            {state ? <Btn send={setState} /> : <AddTask send={{ setState, setUpdateData, updateData, setFilterState }} />}
-            <h3 onClick={() => setShowFilter(true)}>Filters</h3>
-            {showFilters &&
-                <>
-                    <form onSubmit={filterData}>
-                        <label>Search </label>
-                        <input type="text" ref={(element) => inputFilter.current.input = element} />
-                        <select name='status' ref={(element) => { inputFilter.current.status = element }}>
-                            <option name='pending'>pending</option>
-                            <option name='completed'>Completed</option>
-                        </select>
-                        <input type="date" ref={(element) => inputFilter.current.date = element} />
-                        <input type="submit" />
-                    </form>
-                    <br /><button onClick={displayAll}>Display All</button>
-                </>
-            }
-            <><h3>Results</h3><div>{showData}</div></>
+            <h3>Filters</h3>
+            <form onSubmit={filterData}>
+                <label>Search </label>
+                <input type="text" ref={(element) => inputFilter.current.input = element} />
+                <select name='status' ref={(element) => { inputFilter.current.status = element }}>
+                    <option name='pending'>pending</option>
+                    <option name='completed'>Completed</option>
+                </select>
+                <input type="date" ref={(element) => inputFilter.current.date = element} />
+                <input type="submit" />
+            </form>
+            <br /><button onClick={displayAll}>Display All</button>
+            { state ? <Btn send={setState} /> : <AddTask send={{ setState, setUpdateData, updateData, setFilterState }} /> }
+    <><h3>Results</h3><div>{showData}</div></>
         </>
     )
 }
