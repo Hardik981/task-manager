@@ -7,7 +7,7 @@ export const dataReducer = createSlice({
   },
   reducers: {
     addUser: (state, action) => {
-      state.data = [...state.data, { name: action.payload, tasks: [] },]
+      state.data = [...state.data, { name: action.payload.name, id: action.payload.id, tasks: [] },]
     },
     deleteUser: (state, action) => {
       let temp = [...state.data];
@@ -17,7 +17,7 @@ export const dataReducer = createSlice({
     addTask: (state,action) => {
       let temp = [...state.data];
       const dateValue = action.payload.dueDate === '' ? "Not Set" : action.payload.dueDate;
-      temp[action.payload.userIndex].tasks.push({ taskName: action.payload.taskName, status: action.payload.status, dueDate: dateValue })
+      temp[action.payload.userIndex].tasks.push({ taskName: action.payload.taskName, status: action.payload.status, dueDate: dateValue, id: action.payload.id })
       state.data = [...temp];
     },
     changeTask: (state,action) => {
@@ -34,7 +34,6 @@ export const dataReducer = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { addUser, deleteUser, addTask, changeTask, deleteTask
- } = dataReducer.actions
+export const { addUser, deleteUser, addTask, changeTask, deleteTask } = dataReducer.actions
 
 export default dataReducer.reducer

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { addUser, deleteUser } from '../redux/dataReducer';
+const { v4: uuidv4 } = require('uuid');
 export function Users() {
     const data = useSelector((state) => state.getData.data);
     const dispatch = useDispatch();
@@ -12,7 +13,7 @@ export function Users() {
             index: index
         }
         return (
-            <div style={{ display: 'flex', justifyContent: 'space-evenly', margin: '20px 0px' }}>
+            <div key={data.id} style={{ display: 'flex', justifyContent: 'space-evenly', margin: '20px 0px' }}>
                 <Link to={`/${data.name}`} state={sendData}>{data.name}</Link>
                 <button onClick={() => removeItem(index)}>Remove</button>
             </div>
@@ -44,7 +45,8 @@ function TakeUser(props) {
     }, []);
     function setInputData(e) {
         e.preventDefault();
-        dispatch(addUser(inputData.current.value));
+        let id = uuidv4();
+        dispatch(addUser({name: inputData.current.value,id: id}));
         props.send(true);
     }
     return (

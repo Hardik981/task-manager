@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import EdiText from 'react-editext'
 import { useSelector, useDispatch } from 'react-redux';
 import { addTask, changeTask, deleteTask } from '../redux/dataReducer';
+const { v4: uuidv4 } = require('uuid');
 export function Tasks() {
     const location = useLocation();
     const [state, setState] = useState(true);
@@ -14,18 +15,14 @@ export function Tasks() {
     const data = useSelector((state) => state.getData.data);
     const dispatch = useDispatch();
     useEffect(() => {
-        console.log("🚀 ~ file: App.js ~ line 19 ~ Tasks ~ count", data)
-    });
-    useEffect(() => {
         displayData();
-        console.log("🚀 ~ file: App.js ~ line 23 ~ Tasks ~ count", data)
     }, [updateData]);
     function changeDataOnSave(value, index) {
         dispatch(changeTask({ userIndex: location.state.index, index: index, value: value }));
     }
-    function resultJSX(data, index) {
+    function resultJSX(data, index, id) {
         return (
-            <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div key={id} style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                 <EdiText type='text' value={data.taskName} onSave={v => changeDataOnSave(v, index)} />
                 <div>{data.status}</div>
                 <div>{data.dueDate}</div><button onClick={() => removeItem(index)}>Remove</button>
@@ -37,11 +34,11 @@ export function Tasks() {
         data[location.state.index].tasks.map(function (data, index) {
             if (filterState) {
                 if ((data.taskName.toLowerCase().startsWith(inputFilter.current.input.value.toLowerCase()) || data.dueDate === inputFilter.current.date.value) && data.status === inputFilter.current.status.value) {
-                    temp.push(resultJSX(data, index));
+                    temp.push(resultJSX(data, index, data.id));
                 }
             }
             else {
-                temp.push(resultJSX(data, index));
+                temp.push(resultJSX(data, index, data.id));
             }
         })
         setShowData(temp);
@@ -98,7 +95,7 @@ function AddTask(props) {
     }, []);
     function setInputData(e) {
         e.preventDefault();
-        dispatch(addTask({ userIndex: [location.state.index], taskName: getInputData.current.taskName.value, status: getInputData.current.status.value, dueDate: getInputData.current.date.value }));
+        dispatch(addTask({ id: uuidv4(), userIndex: [location.state.index], taskName: getInputData.current.taskName.value, status: getInputData.current.status.value, dueDate: getInputData.current.date.value }));
         props.send.setState(true);
         props.send.setUpdateData(props.send.updateData + 1);
         props.send.setFilterState(false);
