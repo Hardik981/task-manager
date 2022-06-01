@@ -3,7 +3,7 @@ import { Users } from "./pages/Users";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { NoPage } from "./pages/NoPage";
 import { Tasks } from "./pages/Tasks";
-import store from './redux/store';
+import { store } from './redux/store';
 import { Provider } from 'react-redux';
 
 function App() {

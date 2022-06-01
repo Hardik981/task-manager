@@ -34,6 +34,7 @@ export const dataReducer = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { addUser, deleteUser, addTask, changeTask, deleteTask } = dataReducer.actions
+export const { addUser, deleteUser, addTask, changeTask, deleteTask
+ } = dataReducer.actions
 
 export default dataReducer.reducer
