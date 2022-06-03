@@ -7,9 +7,6 @@ function Users() {
     const data = useSelector((state) => state.getData.data);
     const dispatch = useDispatch();
     const [state, setState] = useState(true);
-    /* useEffect(() => {
-        throw new Error('CABOOM');
-    }, []); */
     const listNames = data.map(function (data, index) {
         let sendData = {
             name: data.name,

@@ -87,7 +87,7 @@ function Tasks() {
                 <input type="date" ref={(element) => inputFilter.current.date = element} />
                 <input type="submit" />
             </form>
-            <br /><button onClick={displayAll}>Display All</button>
+            <br /><button onClick={displayAll}>Display All</button><br /><br />
             {state ? <Btn send={setState} /> : <AddTask send={{ setState, setUpdateData, updateData, setFilterState }} />}
             <h3>Results</h3><div>{showData}</div>
         </>
