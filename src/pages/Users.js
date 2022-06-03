@@ -3,10 +3,13 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { addUser, deleteUser } from '../redux/dataReducer';
 const { v4: uuidv4 } = require('uuid');
-export function Users() {
+function Users() {
     const data = useSelector((state) => state.getData.data);
     const dispatch = useDispatch();
     const [state, setState] = useState(true);
+    /* useEffect(() => {
+        throw new Error('CABOOM');
+    }, []); */
     const listNames = data.map(function (data, index) {
         let sendData = {
             name: data.name,
@@ -38,7 +41,6 @@ function Btn(props) {
 }
 function TakeUser(props) {
     const inputData = useRef();
-    const data = useSelector((state) => state.getData.data);
     const dispatch = useDispatch();
     useEffect(() => {
         inputData.current.focus();
@@ -59,3 +61,5 @@ function TakeUser(props) {
         </>
     )
 }
+
+export default Users;

@@ -1,10 +1,28 @@
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useState, useRef, useEffect } from 'react';
 import EdiText from 'react-editext'
 import { useSelector, useDispatch } from 'react-redux';
 import { addTask, changeTask, deleteTask } from '../redux/dataReducer';
 const { v4: uuidv4 } = require('uuid');
-export function Tasks() {
+function CheckTaskUrl() {
+    const location = useLocation();
+    let navigate = useNavigate();
+    const [run, setRun] = useState(false);
+    useEffect(() => {
+        if (location?.pathname.slice(1) === location?.state?.name) {
+            setRun(true);
+        }
+        else {
+            setRun(false);
+            navigate("*");
+        }
+    }, []);
+    return (
+        run &&
+        <Tasks />
+    )
+}
+function Tasks() {
     const location = useLocation();
     const [state, setState] = useState(true);
     const inputFilter = useRef({});
@@ -57,7 +75,7 @@ export function Tasks() {
     }
     return (
         <>
-            <h3>{location.state?.name} Task</h3>
+            <h3>{location?.state?.name} Task</h3>
             <h3>Filters</h3>
             <form onSubmit={filterData}>
                 <label>Search </label>
@@ -70,8 +88,8 @@ export function Tasks() {
                 <input type="submit" />
             </form>
             <br /><button onClick={displayAll}>Display All</button>
-            { state ? <Btn send={setState} /> : <AddTask send={{ setState, setUpdateData, updateData, setFilterState }} /> }
-    <><h3>Results</h3><div>{showData}</div></>
+            {state ? <Btn send={setState} /> : <AddTask send={{ setState, setUpdateData, updateData, setFilterState }} />}
+            <h3>Results</h3><div>{showData}</div>
         </>
     )
 }
@@ -110,3 +128,5 @@ function AddTask(props) {
         </form>
     );
 }
+
+export default CheckTaskUrl;
