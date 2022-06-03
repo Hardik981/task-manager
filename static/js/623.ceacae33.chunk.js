@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunktask_manager=self.webpackChunktask_manager||[]).push([[623],{623:function(e,n,a){a.r(n);var r=a(504),s=a(184);n.default=function(){return(0,s.jsxs)(s.Fragment,{children:[(0,s.jsx)("h1",{children:"No Page Found"}),(0,s.jsx)(r.rU,{to:"/",children:"Home"})]})}}}]);
+//# sourceMappingURL=623.ceacae33.chunk.js.map

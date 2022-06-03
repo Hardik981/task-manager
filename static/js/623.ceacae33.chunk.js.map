@@ -1,0 +1,1 @@
+{"version":3,"file":"static/js/623.ceacae33.chunk.js","mappings":"6IAKA,UAJA,WACI,OAAQ,iCAAE,2CAAsB,SAAC,KAAD,CAAMA,GAAG,IAAT","sources":["pages/NoPage.js"],"sourcesContent":["import { Link } from \"react-router-dom\";\nfunction NoPage() {\n    return (<><h1>No Page Found</h1><Link to=\"/\">Home</Link></>)\n}\n\nexport default NoPage;"],"names":["to"],"sourceRoot":""}
