@@ -24,7 +24,8 @@ function CheckTaskUrl() {
 }
 function Tasks() {
     const location = useLocation();
-    const [state, setState] = useState(true);
+    const [btnState, setBtnState] = useState(true);
+    const [filterBtnState, setFilterBtnState] = useState(true);
     const inputFilter = useRef({});
     const [showData, setShowData] = useState([]);
     const [filterState, setFilterState] = useState(false);
@@ -39,7 +40,7 @@ function Tasks() {
     }
     function resultJSX(data, index, id) {
         return (
-            <div key={id} style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+            <div key={id} className="displayData">
                 <EdiText type='text' value={data.taskName} onSave={v => changeDataOnSave(v, index)} />
                 <div>{data.status}</div>
                 <div>{data.dueDate}</div><button onClick={() => removeItem(index)}>Remove</button>
@@ -64,40 +65,33 @@ function Tasks() {
         dispatch(deleteTask({ userIndex: location.state.index, index: index }));
         setUpdateData(updateData + 1);
     }
-    function filterData(e) {
-        e.preventDefault();
-        setUpdateData(updateData + 1);
-        setFilterState(true);
-    }
     function displayAll() {
         setUpdateData(updateData + 1);
         setFilterState(false)
     }
     return (
         <>
-            <h3>{location?.state?.name} Task</h3>
-            <h3>Filters</h3>
-            <form onSubmit={filterData}>
-                <label>Search </label>
-                <input type="text" ref={(element) => inputFilter.current.input = element} />
-                <select name='status' ref={(element) => { inputFilter.current.status = element }}>
-                    <option name='pending'>pending</option>
-                    <option name='completed'>Completed</option>
-                </select>
-                <input type="date" ref={(element) => inputFilter.current.date = element} />
-                <input type="submit" />
-            </form>
-            <br /><button onClick={displayAll}>Display All</button><br /><br />
-            {state ? <Btn send={setState} /> : <AddTask send={{ setState, setUpdateData, updateData, setFilterState }} />}
-            <h3>Results</h3><div>{showData}</div>
+            <h2>{location?.state?.name} Task</h2>
+            <section>
+                {btnState ? <TaskBtn send={setBtnState} /> : <AddTask send={{ setBtnState, setUpdateData, updateData, setFilterState }} />}
+                {filterBtnState ? <FilterTaskBtn send={setFilterBtnState} /> : <SearchFilters send={{ setFilterBtnState, setFilterState, setUpdateData, updateData, inputFilter }} />}
+                <button onClick={displayAll}>Display All</button>
+                <h3>Results</h3><div>{showData}</div>
+            </section>
         </>
     )
 }
-function Btn(props) {
+function TaskBtn(props) {
     function changeState() {
         props.send(false);
     }
     return <button onClick={changeState}>Add Task</button>;
+}
+function FilterTaskBtn(props) {
+    function changeState() {
+        props.send(false);
+    }
+    return <button onClick={changeState}>Filters</button>;
 }
 function AddTask(props) {
     const location = useLocation();
@@ -109,14 +103,16 @@ function AddTask(props) {
     function setInputData(e) {
         e.preventDefault();
         dispatch(addTask({ id: uuidv4(), userIndex: [location.state.index], taskName: getInputData.current.taskName.value, status: getInputData.current.status.value, dueDate: getInputData.current.date.value }));
-        props.send.setState(true);
+        props.send.setBtnState(true);
         props.send.setUpdateData(props.send.updateData + 1);
         props.send.setFilterState(false);
     }
+    function close() {
+        props.send.setBtnState(true);
+    }
     return (
         <form onSubmit={setInputData}>
-            <label>Task Name </label>
-            <input type='text' ref={(element) => { getInputData.current.taskName = element }} />
+            <input type='text' ref={(element) => { getInputData.current.taskName = element }} placeholder="Enter the Task" />
             <label>Status </label>
             <select name='status' ref={(element) => { getInputData.current.status = element }}>
                 <option name='pending'>pending</option>
@@ -125,8 +121,33 @@ function AddTask(props) {
             <label>Due Date </label>
             <input type="date" name='due-date' ref={(element) => { getInputData.current.date = element }} />
             <input type="submit" />
+            <button onClick={close}>Close</button>
         </form>
     );
+}
+
+function SearchFilters(props) {
+    function filterData(e) {
+        e.preventDefault();
+        props.send.setUpdateData(props.send.updateData + 1);
+        props.send.setFilterState(true);
+        props.send.setFilterBtnState(true);
+    }
+    function close() {
+        props.send.setFilterBtnState(true);
+    }
+    return (
+        <form onSubmit={filterData}>
+            <input type="text" ref={(element) => props.send.inputFilter.current.input = element} placeholder="Search Text" />
+            <select name='status' ref={(element) => { props.send.inputFilter.current.status = element }}>
+                <option name='pending'>pending</option>
+                <option name='completed'>Completed</option>
+            </select>
+            <input type="date" ref={(element) => props.send.inputFilter.current.date = element} />
+            <input type="submit" />
+            <button onClick={close}>Close</button>
+        </form>
+    )
 }
 
 export default CheckTaskUrl;

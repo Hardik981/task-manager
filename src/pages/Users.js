@@ -13,7 +13,7 @@ function Users() {
             index: index
         }
         return (
-            <div key={data.id} style={{ display: 'flex', justifyContent: 'space-evenly', margin: '20px 0px' }}>
+            <div key={data.id} className="displayData">
                 <Link to={`/${data.name}`} state={sendData}>{data.name}</Link>
                 <button onClick={() => removeItem(index)}>Remove</button>
             </div>
@@ -24,9 +24,11 @@ function Users() {
     }
     return (
         <>
-            <h3>Users</h3>
-            {state ? <Btn send={setState} /> : <TakeUser send={setState} />}
-            <div>{listNames}</div>
+            <h2>Users</h2>
+            <section>
+                {state ? <Btn send={setState} /> : <TakeUser send={setState} />}
+                <div>{listNames}</div>
+            </section>
         </>
     )
 }
@@ -45,7 +47,7 @@ function TakeUser(props) {
     function setInputData(e) {
         e.preventDefault();
         let id = uuidv4();
-        dispatch(addUser({name: inputData.current.value,id: id}));
+        dispatch(addUser({ name: inputData.current.value, id: id }));
         props.send(true);
     }
     return (
