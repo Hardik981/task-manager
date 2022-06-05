@@ -39,22 +39,35 @@ function Btn(props) {
     return <button onClick={changeState}>Add User</button>;
 }
 function TakeUser(props) {
+    const data = useSelector((state) => state.getData.data);
     const inputData = useRef();
     const dispatch = useDispatch();
+    const [uniWrg, changeUniWrg] = useState(0);
     useEffect(() => {
-        inputData.current.focus();
-    }, []);
+        if (uniWrg > 0) {
+            window.alert("Values Should be Unique");
+        }
+    }, [uniWrg]);
     function setInputData(e) {
         e.preventDefault();
-        let id = uuidv4();
-        dispatch(addUser({ name: inputData.current.value, id: id }));
-        props.send(true);
+        let result = false;
+        data.map(function (data) {
+            if (inputData.current.value === data.name) { result = true };
+        })
+        if (result) {
+            changeUniWrg(uniWrg + 1);
+        }
+        else {
+            let id = uuidv4();
+            dispatch(addUser({ name: inputData.current.value, id: id }));
+            props.send(true);
+        }
     }
     return (
         <>
             <form onSubmit={setInputData}>
                 <label style={{ marginBottom: 0 }}>Enter the Name</label>
-                <input type="text" ref={inputData} />
+                <input type="text" autoFocus ref={inputData} />
                 <input type="submit" />
             </form>
         </>
