@@ -52,7 +52,7 @@ function TakeUser(props) {
         e.preventDefault();
         let result = false;
         data.map(function (data) {
-            if (inputData.current.value === data.name) { result = true };
+            if (inputData.current.value.toLowerCase() === data.name.toLowerCase()) { result = true };
         })
         if (result) {
             changeUniWrg(uniWrg + 1);
