@@ -26,7 +26,7 @@ function Tasks() {
     const location = useLocation();
     const [btnState, setBtnState] = useState(true);
     const [filterBtnState, setFilterBtnState] = useState(true);
-    const inputFilter = useRef({});
+    const [inputFilter,setInputFilter] = useState({taskName:null,dueDate:null,status:'pending'});
     const [showData, setShowData] = useState([]);
     const [filterState, setFilterState] = useState(false);
     const [updateData, setUpdateData] = useState(0);
@@ -51,7 +51,7 @@ function Tasks() {
         let temp = [];
         data[location.state.index].tasks.map(function (data, index) {
             if (filterState) {
-                if ((data.taskName.toLowerCase().startsWith(inputFilter.current.input.value.toLowerCase()) || data.dueDate === inputFilter.current.date.value) && data.status === inputFilter.current.status.value) {
+                if ((data.taskName.toLowerCase().startsWith(inputFilter.taskName.toLowerCase()) || data.dueDate === inputFilter.dueDate) && data.status === inputFilter.status) {
                     temp.push(resultJSX(data, index, data.id));
                 }
             }
@@ -74,7 +74,7 @@ function Tasks() {
             <h2>{location?.state?.name} Task</h2>
             <section>
                 {btnState ? <TaskBtn send={setBtnState} /> : <AddTask send={{ setBtnState, setUpdateData, updateData, setFilterState }} />}
-                {filterBtnState ? <FilterTaskBtn send={setFilterBtnState} /> : <SearchFilters send={{ setFilterBtnState, setFilterState, setUpdateData, updateData, inputFilter }} />}
+                {filterBtnState ? <FilterTaskBtn send={setFilterBtnState} /> : <SearchFilters send={{ setFilterBtnState, setFilterState, setUpdateData, updateData, inputFilter, setInputFilter }} />}
                 <button onClick={displayAll}>Display All</button>
                 <h3>Results</h3><div>{showData}</div>
             </section>
@@ -138,12 +138,12 @@ function SearchFilters(props) {
     }
     return (
         <form onSubmit={filterData}>
-            <input type="text" ref={(element) => props.send.inputFilter.current.input = element} placeholder="Search Text" />
-            <select name='status' ref={(element) => { props.send.inputFilter.current.status = element }}>
+            <input type="text" onChange={(e) => props.send.setInputFilter({taskName:e.target.value,dueDate:props.send.inputFilter.dueDate,status:props.send.inputFilter.status})} placeholder="Search Text" />
+            <select name='status' onChange={(e) => props.send.setInputFilter({taskName:props.send.inputFilter.taskName,dueDate:props.send.inputFilter.dueDate,status:e.target.value})}>
                 <option name='pending'>pending</option>
                 <option name='completed'>Completed</option>
             </select>
-            <input type="date" ref={(element) => props.send.inputFilter.current.date = element} />
+            <input type="date" onChange={(e) => props.send.setInputFilter({taskName:props.send.inputFilter.taskName,dueDate:e.target.value,status:props.send.inputFilter.status})} />
             <input type="submit" />
             <button onClick={close}>Close</button>
         </form>

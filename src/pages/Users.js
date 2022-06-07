@@ -40,7 +40,7 @@ function Btn(props) {
 }
 function TakeUser(props) {
     const data = useSelector((state) => state.getData.data);
-    const inputData = useRef();
+    const [inputData,changeInputData] = useState(); 
     const dispatch = useDispatch();
     const [uniWrg, changeUniWrg] = useState(0);
     useEffect(() => {
@@ -52,14 +52,14 @@ function TakeUser(props) {
         e.preventDefault();
         let result = false;
         data.map(function (data) {
-            if (inputData.current.value.toLowerCase() === data.name.toLowerCase()) { result = true };
+            if (inputData.toLowerCase() === data.name.toLowerCase()) { result = true };
         })
         if (result) {
             changeUniWrg(uniWrg + 1);
         }
         else {
             let id = uuidv4();
-            dispatch(addUser({ name: inputData.current.value, id: id }));
+            dispatch(addUser({ name: inputData, id: id }));
             props.send(true);
         }
     }
@@ -67,7 +67,7 @@ function TakeUser(props) {
         <>
             <form onSubmit={setInputData}>
                 <label style={{ marginBottom: 0 }}>Enter the Name</label>
-                <input type="text" autoFocus ref={inputData} />
+                <input type="text" autoFocus onChange={(e)=>changeInputData(e.target.value)} />
                 <input type="submit" />
             </form>
         </>
