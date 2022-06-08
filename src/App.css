@@ -44,3 +44,7 @@ button{
 section{
   padding: 0 10%;
 }
+label{
+  position: relative;
+  top:5px;
+}

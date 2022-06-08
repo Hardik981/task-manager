@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import EdiText from 'react-editext'
 import { useSelector, useDispatch } from 'react-redux';
 import { addTask, changeTask, deleteTask } from '../redux/dataReducer';
@@ -51,7 +51,7 @@ function Tasks() {
         let temp = [];
         data[location.state.index].tasks.map(function (data, index) {
             if (filterState) {
-                if ((data.taskName.toLowerCase().startsWith(inputFilter.taskName.toLowerCase()) || data.dueDate === inputFilter.dueDate) && data.status === inputFilter.status) {
+                if ((data.taskName.toLowerCase().startsWith(inputFilter.taskName?.toLowerCase()) || inputFilter.taskName === null) && (data.dueDate === inputFilter.dueDate || inputFilter.dueDate === null) && data.status === inputFilter.status) {
                     temp.push(resultJSX(data, index, data.id));
                 }
             }
@@ -95,14 +95,11 @@ function FilterTaskBtn(props) {
 }
 function AddTask(props) {
     const location = useLocation();
-    const getInputData = useRef({});
+    const [getInputData,setGetInputData] = useState({taskName:null,status:'pending',dueDate:null});
     const dispatch = useDispatch();
-    useEffect(() => {
-        getInputData.current.taskName.focus();
-    }, []);
     function setInputData(e) {
         e.preventDefault();
-        dispatch(addTask({ id: uuidv4(), userIndex: [location.state.index], taskName: getInputData.current.taskName.value, status: getInputData.current.status.value, dueDate: getInputData.current.date.value }));
+        dispatch(addTask({ id: uuidv4(), userIndex: [location.state.index], taskName: getInputData.taskName, status: getInputData.status, dueDate: getInputData.dueDate }));
         props.send.setBtnState(true);
         props.send.setUpdateData(props.send.updateData + 1);
         props.send.setFilterState(false);
@@ -112,14 +109,14 @@ function AddTask(props) {
     }
     return (
         <form onSubmit={setInputData}>
-            <input type='text' ref={(element) => { getInputData.current.taskName = element }} placeholder="Enter the Task" />
+            <input type='text' autoFocus onChange={(e) => { setGetInputData({taskName:e.target.value,status:getInputData.status,dueDate:getInputData.dueDate}) }} placeholder="Enter the Task" />
             <label>Status </label>
-            <select name='status' ref={(element) => { getInputData.current.status = element }}>
-                <option name='pending'>pending</option>
-                <option name='completed'>Completed</option>
+            <select onChange={(e) => { setGetInputData({taskName:getInputData.taskName,status:e.target.value,dueDate:getInputData.dueDate}) }}>
+                <option value='pending'>pending</option>
+                <option value='completed'>Completed</option>
             </select>
             <label>Due Date </label>
-            <input type="date" name='due-date' ref={(element) => { getInputData.current.date = element }} />
+            <input type="date" onChange={(e) => { setGetInputData({taskName:getInputData.taskName,status:getInputData.status,dueDate:e.target.value}) }} />
             <input type="submit" />
             <button onClick={close}>Close</button>
         </form>
@@ -132,6 +129,7 @@ function SearchFilters(props) {
         props.send.setUpdateData(props.send.updateData + 1);
         props.send.setFilterState(true);
         props.send.setFilterBtnState(true);
+        console.log('Search Data: ',props.send.inputFilter)
     }
     function close() {
         props.send.setFilterBtnState(true);
