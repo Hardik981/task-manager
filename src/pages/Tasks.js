@@ -26,7 +26,7 @@ function Tasks() {
     const location = useLocation();
     const [btnState, setBtnState] = useState(true);
     const [filterBtnState, setFilterBtnState] = useState(true);
-    const [inputFilter,setInputFilter] = useState({taskName:null,dueDate:null,status:'pending'});
+    const [inputFilter, setInputFilter] = useState({ taskName: null, dueDate: null, status: 'pending' });
     const [showData, setShowData] = useState([]);
     const [filterState, setFilterState] = useState(false);
     const [updateData, setUpdateData] = useState(0);
@@ -95,7 +95,7 @@ function FilterTaskBtn(props) {
 }
 function AddTask(props) {
     const location = useLocation();
-    const [getInputData,setGetInputData] = useState({taskName:null,status:'pending',dueDate:null});
+    const [getInputData, setGetInputData] = useState({ taskName: null, status: 'pending', dueDate: null });
     const dispatch = useDispatch();
     function setInputData(e) {
         e.preventDefault();
@@ -109,14 +109,14 @@ function AddTask(props) {
     }
     return (
         <form onSubmit={setInputData}>
-            <input type='text' autoFocus onChange={(e) => { setGetInputData({taskName:e.target.value,status:getInputData.status,dueDate:getInputData.dueDate}) }} placeholder="Enter the Task" />
+            <input type='text' autoFocus onChange={(e) => { setGetInputData({ taskName: e.target.value, status: getInputData.status, dueDate: getInputData.dueDate }) }} placeholder="Enter the Task" />
             <label>Status </label>
-            <select onChange={(e) => { setGetInputData({taskName:getInputData.taskName,status:e.target.value,dueDate:getInputData.dueDate}) }}>
+            <select onChange={(e) => { setGetInputData({ taskName: getInputData.taskName, status: e.target.value, dueDate: getInputData.dueDate }) }}>
                 <option value='pending'>pending</option>
                 <option value='completed'>Completed</option>
             </select>
             <label>Due Date </label>
-            <input type="date" onChange={(e) => { setGetInputData({taskName:getInputData.taskName,status:getInputData.status,dueDate:e.target.value}) }} />
+            <input type="date" onChange={(e) => { setGetInputData({ taskName: getInputData.taskName, status: getInputData.status, dueDate: e.target.value }) }} />
             <input type="submit" />
             <button onClick={close}>Close</button>
         </form>
@@ -129,19 +129,18 @@ function SearchFilters(props) {
         props.send.setUpdateData(props.send.updateData + 1);
         props.send.setFilterState(true);
         props.send.setFilterBtnState(true);
-        console.log('Search Data: ',props.send.inputFilter)
     }
     function close() {
         props.send.setFilterBtnState(true);
     }
     return (
         <form onSubmit={filterData}>
-            <input type="text" onChange={(e) => props.send.setInputFilter({taskName:e.target.value,dueDate:props.send.inputFilter.dueDate,status:props.send.inputFilter.status})} placeholder="Search Text" />
-            <select name='status' onChange={(e) => props.send.setInputFilter({taskName:props.send.inputFilter.taskName,dueDate:props.send.inputFilter.dueDate,status:e.target.value})}>
-                <option name='pending'>pending</option>
-                <option name='completed'>Completed</option>
+            <input type="text" onChange={(e) => props.send.setInputFilter({ taskName: e.target.value, dueDate: props.send.inputFilter.dueDate, status: props.send.inputFilter.status })} placeholder="Search Text" />
+            <select onChange={(e) => props.send.setInputFilter({ taskName: props.send.inputFilter.taskName, dueDate: props.send.inputFilter.dueDate, status: e.target.value })}>
+                <option value='pending'>pending</option>
+                <option value='completed'>Completed</option>
             </select>
-            <input type="date" onChange={(e) => props.send.setInputFilter({taskName:props.send.inputFilter.taskName,dueDate:e.target.value,status:props.send.inputFilter.status})} />
+            <input type="date" onChange={(e) => props.send.setInputFilter({ taskName: props.send.inputFilter.taskName, dueDate: e.target.value, status: props.send.inputFilter.status })} />
             <input type="submit" />
             <button onClick={close}>Close</button>
         </form>
