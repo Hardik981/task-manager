@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import EdiText from 'react-editext'
 import { useSelector, useDispatch } from 'react-redux';
 import { addTask, changeTask, deleteTask } from '../redux/dataReducer';
-const { v4: uuidv4 } = require('uuid');
 function CheckTaskUrl() {
     const location = useLocation();
     let navigate = useNavigate();
@@ -43,7 +42,7 @@ function Tasks() {
             <div key={id} className="displayData">
                 <EdiText type='text' value={data.taskName} onSave={v => changeDataOnSave(v, index)} />
                 <div>{data.status}</div>
-                <div>{data.dueDate}</div><button onClick={() => removeItem(index)}>Remove</button>
+                <div>{data.dueDate}</div><button onClick={() => removeItem(id)}>Remove</button>
             </div>
         )
     }
@@ -61,8 +60,8 @@ function Tasks() {
         })
         setShowData(temp);
     }
-    function removeItem(index) {
-        dispatch(deleteTask({ userIndex: location.state.index, index: index }));
+    function removeItem(id) {
+        dispatch(deleteTask({ userIndex: location.state.index, id: id }));
         setUpdateData(updateData + 1);
     }
     function displayAll() {
@@ -99,7 +98,7 @@ function AddTask(props) {
     const dispatch = useDispatch();
     function setInputData(e) {
         e.preventDefault();
-        dispatch(addTask({ id: uuidv4(), userIndex: [location.state.index], taskName: getInputData.taskName, status: getInputData.status, dueDate: getInputData.dueDate }));
+        dispatch(addTask({ id: Date.now(), userIndex: [location.state.index], taskName: getInputData.taskName, status: getInputData.status, dueDate: getInputData.dueDate }));
         props.send.setBtnState(true);
         props.send.setUpdateData(props.send.updateData + 1);
         props.send.setFilterState(false);

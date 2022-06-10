@@ -10,14 +10,11 @@ export const dataReducer = createSlice({
       state.data = [...state.data, { name: action.payload.name, id: action.payload.id, tasks: [] },]
     },
     deleteUser: (state, action) => {
-      let temp = [...state.data];
-      temp.splice(action.payload, 1);
-      state.data = [...temp];
+      state.data = state.data.filter(user => user.id !== action.payload)
     },
     addTask: (state,action) => {
       let temp = [...state.data];
-      const dateValue = action.payload.dueDate === '' ? "Not Set" : action.payload.dueDate;
-      temp[action.payload.userIndex].tasks.push({ taskName: action.payload.taskName, status: action.payload.status, dueDate: dateValue, id: action.payload.id })
+      temp[action.payload.userIndex].tasks.push({ taskName: action.payload.taskName, status: action.payload.status, dueDate: action.payload.dueDate, id: action.payload.id })
       state.data = [...temp];
     },
     changeTask: (state,action) => {
@@ -27,7 +24,7 @@ export const dataReducer = createSlice({
     },
     deleteTask: (state,action) => {
       let temp = [...state.data];
-      temp[action.payload.userIndex].tasks.splice(action.payload.index, 1);
+      temp[action.payload.userIndex].tasks = temp[action.payload.userIndex].tasks.filter(task=> task.id !== action.payload.id);
       state.data = temp;
     },
   },
