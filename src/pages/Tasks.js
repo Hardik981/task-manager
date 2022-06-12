@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import EdiText from 'react-editext'
 import { useSelector, useDispatch } from 'react-redux';
 import { addTask, changeTask, deleteTask } from '../redux/dataReducer';
+import styles from '../css/users.module.css';
 function CheckTaskUrl() {
     const location = useLocation();
     let navigate = useNavigate();
@@ -39,7 +40,7 @@ function Tasks() {
     }
     function resultJSX(data, index, id) {
         return (
-            <div key={id} className="displayData">
+            <div key={id} className={styles.displayData}>
                 <EdiText type='text' value={data.taskName} onSave={v => changeDataOnSave(v, index)} />
                 <div>{data.status}</div>
                 <div>{data.dueDate}</div><button onClick={() => removeItem(id)}>Remove</button>
@@ -70,13 +71,13 @@ function Tasks() {
     }
     return (
         <>
-            <h2>{location?.state?.name} Task</h2>
-            <section>
+            <h2 className={styles.heading}>{location?.state?.name} Task</h2>
+            <div className={styles.bodySpace}>
                 {btnState ? <TaskBtn send={setBtnState} /> : <AddTask send={{ setBtnState, setUpdateData, updateData, setFilterState }} />}
                 {filterBtnState ? <FilterTaskBtn send={setFilterBtnState} /> : <SearchFilters send={{ setFilterBtnState, setFilterState, setUpdateData, updateData, inputFilter, setInputFilter }} />}
-                <button onClick={displayAll}>Display All</button>
+                <button className={styles.button} onClick={displayAll}>Display All</button>
                 <h3>Results</h3><div>{showData}</div>
-            </section>
+            </div>
         </>
     )
 }
@@ -84,13 +85,13 @@ function TaskBtn(props) {
     function changeState() {
         props.send(false);
     }
-    return <button onClick={changeState}>Add Task</button>;
+    return <button className={styles.button} onClick={changeState}>Add Task</button>;
 }
 function FilterTaskBtn(props) {
     function changeState() {
         props.send(false);
     }
-    return <button onClick={changeState}>Filters</button>;
+    return <button className={styles.button} onClick={changeState}>Filters</button>;
 }
 function AddTask(props) {
     const location = useLocation();
@@ -107,17 +108,17 @@ function AddTask(props) {
         props.send.setBtnState(true);
     }
     return (
-        <form onSubmit={setInputData}>
-            <input type='text' autoFocus onChange={(e) => { setGetInputData({ taskName: e.target.value, status: getInputData.status, dueDate: getInputData.dueDate }) }} placeholder="Enter the Task" />
-            <label>Status </label>
-            <select onChange={(e) => { setGetInputData({ taskName: getInputData.taskName, status: e.target.value, dueDate: getInputData.dueDate }) }}>
+        <form className={styles.form} onSubmit={setInputData}>
+            <input className={styles.input} type='text' autoFocus onChange={(e) => { setGetInputData({ taskName: e.target.value, status: getInputData.status, dueDate: getInputData.dueDate }) }} placeholder="Enter the Task" />
+            <label className={styles.label}>Status </label>
+            <select className={styles.select} onChange={(e) => { setGetInputData({ taskName: getInputData.taskName, status: e.target.value, dueDate: getInputData.dueDate }) }}>
                 <option value='pending'>pending</option>
                 <option value='completed'>Completed</option>
             </select>
-            <label>Due Date </label>
-            <input type="date" onChange={(e) => { setGetInputData({ taskName: getInputData.taskName, status: getInputData.status, dueDate: e.target.value }) }} />
-            <input type="submit" />
-            <button onClick={close}>Close</button>
+            <label className={styles.label}>Due Date </label>
+            <input className={styles.input} type="date" onChange={(e) => { setGetInputData({ taskName: getInputData.taskName, status: getInputData.status, dueDate: e.target.value }) }} />
+            <input className={styles.button} type="submit" />
+            <button className={styles.button} onClick={close}>Close</button>
         </form>
     );
 }

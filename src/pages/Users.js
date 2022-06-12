@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { addUser, deleteUser } from '../redux/dataReducer';
+import styles from '../css/users.module.css'
 function Users() {
     const data = useSelector((state) => state.getData.data);
     const dispatch = useDispatch();
@@ -12,7 +13,7 @@ function Users() {
             index: index
         }
         return (
-            <div key={data.id} className="displayData">
+            <div key={data.id} className={styles.displayData}>
                 <Link to={`/${data.name}`} state={sendData}>{data.name}</Link>
                 <button onClick={() => removeItem(data.id)}>Remove</button>
             </div>
@@ -23,11 +24,11 @@ function Users() {
     }
     return (
         <>
-            <h2>Users</h2>
-            <section>
+            <h2 className={styles.heading}>Users</h2>
+            <div className={styles.bodySpace}>
                 {state ? <Btn send={setState} /> : <TakeUser send={setState} />}
-                <div>{listNames}</div>
-            </section>
+                <div className={styles.displayDataBox}>{listNames}</div>
+            </div>
         </>
     )
 }
@@ -35,7 +36,7 @@ function Btn(props) {
     function changeState() {
         props.send(false);
     }
-    return <button onClick={changeState}>Add User</button>;
+    return <button className={styles.addUsrBtn} onClick={changeState}>Add User</button>;
 }
 function TakeUser(props) {
     const data = useSelector((state) => state.getData.data);
@@ -63,10 +64,10 @@ function TakeUser(props) {
     }
     return (
         <>
-            <form onSubmit={setInputData}>
-                <label style={{ marginBottom: 0 }}>Enter the Name</label>
-                <input type="text" autoFocus onChange={(e)=>changeInputData(e.target.value)} />
-                <input type="submit" />
+            <form onSubmit={setInputData} className={styles.addUsrForm}>
+                <label className={styles.addUsrLabel}>Enter the Name</label>
+                <input type="text" autoFocus className={styles.addUsrInput} onChange={(e)=>changeInputData(e.target.value)} />
+                <input type="submit" className={styles.addUsrSubmit} />
             </form>
         </>
     )

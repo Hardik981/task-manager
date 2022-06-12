@@ -1,0 +1,53 @@
+.heading {
+    background-color: #0078d7;
+    color: #fff;
+    margin: 0 0 20px 0;
+    padding: 10px;
+}
+.bodySpace {
+    padding: 0 10%;
+}
+.input {
+    height: 30px;
+    width: 150px !important;
+    margin: 0 10px;
+}
+
+.select {
+    height: 30px;
+    margin: 0 10px;
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.displayData {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin: 10px 0px;
+    border: 1px solid black;
+}
+
+.displayData>* {
+    width: 150px;
+    margin: 10px 0;
+}
+
+.button {
+    margin: 0 5px;
+    height: 30px;
+    background-color: lightgray;
+}
+
+.label {
+    position: relative;
+    top: 5px;
+}
+
+#hello{
+    position:relative;
+}
