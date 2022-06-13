@@ -7,6 +7,7 @@ function Users() {
     const data = useSelector((state) => state.getData.data);
     const dispatch = useDispatch();
     const [state, setState] = useState(true);
+    const [showDisplayDataBox, changeShowDisplayDataBox] = useState(false);
     const listNames = data.map(function (data, index) {
         let sendData = {
             name: data.name,
@@ -19,6 +20,12 @@ function Users() {
             </div>
         )
     });
+    useEffect(() => {
+        if (data?.length > 0) changeShowDisplayDataBox(true);
+    }, []);
+    useEffect(() => {
+        data?.length > 0 ? changeShowDisplayDataBox(true) : changeShowDisplayDataBox(false);
+    }, [data]);
     function removeItem(id) {
         dispatch(deleteUser(id));
     }
@@ -26,8 +33,8 @@ function Users() {
         <>
             <h2 className={styles.heading}>Users</h2>
             <div className={styles.bodySpace}>
-                {state ? <Btn send={setState} /> : <TakeUser send={setState} />}
-                <div className={styles.displayDataBox}>{listNames}</div>
+                {state ? <Btn send={setState} /> : <TakeUser send={{ setState, changeShowDisplayDataBox }} />}
+                {showDisplayDataBox ? <div className={styles.displayDataBox}>{listNames}</div> : <></>}
             </div>
         </>
     )
@@ -40,7 +47,7 @@ function Btn(props) {
 }
 function TakeUser(props) {
     const data = useSelector((state) => state.getData.data);
-    const [inputData,changeInputData] = useState(); 
+    const [inputData, changeInputData] = useState();
     const dispatch = useDispatch();
     const [uniWrg, changeUniWrg] = useState(0);
     useEffect(() => {
@@ -52,21 +59,22 @@ function TakeUser(props) {
         e.preventDefault();
         let result = false;
         data.map(function (data) {
-            if (inputData.toLowerCase() === data.name.toLowerCase()) { result = true };
+            if (inputData?.toLowerCase() === data.name?.toLowerCase()) { result = true };
         })
         if (result) {
             changeUniWrg(uniWrg + 1);
         }
         else {
             dispatch(addUser({ name: inputData, id: Date.now() }));
-            props.send(true);
+            props.send.setState(true);
+            props.send.changeShowDisplayDataBox(true);
         }
     }
     return (
         <>
             <form onSubmit={setInputData} className={styles.addUsrForm}>
                 <label className={styles.addUsrLabel}>Enter the Name</label>
-                <input type="text" autoFocus className={styles.addUsrInput} onChange={(e)=>changeInputData(e.target.value)} />
+                <input type="text" autoFocus className={styles.addUsrInput} onChange={(e) => changeInputData(e.target.value)} />
                 <input type="submit" className={styles.addUsrSubmit} />
             </form>
         </>
