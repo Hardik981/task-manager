@@ -30,11 +30,18 @@ function Tasks() {
     const [showData, setShowData] = useState([]);
     const [filterState, setFilterState] = useState(false);
     const [updateData, setUpdateData] = useState(0);
+    const [showDataBox,changeShowDataBox] = useState(false);
     const data = useSelector((state) => state.getData.data);
     const dispatch = useDispatch();
     useEffect(() => {
         displayData();
     }, [updateData]);
+    useEffect(() => {
+        if (data[location.state.index].tasks?.length > 0) changeShowDataBox(true);
+    }, []);
+    useEffect(() => {
+        data[location.state.index].tasks?.length > 0 ? changeShowDataBox(true) : changeShowDataBox(false);
+    }, [data]);
     function changeDataOnSave(value, index) {
         dispatch(changeTask({ userIndex: location.state.index, index: index, value: value }));
     }
@@ -76,7 +83,7 @@ function Tasks() {
                 {btnState ? <TaskBtn send={setBtnState} /> : <AddTask send={{ setBtnState, setUpdateData, updateData, setFilterState }} />}
                 {filterBtnState ? <FilterTaskBtn send={setFilterBtnState} /> : <SearchFilters send={{ setFilterBtnState, setFilterState, setUpdateData, updateData, inputFilter, setInputFilter }} />}
                 <button className={styles.btn} onClick={displayAll}>Display All</button>
-                <h3>Results</h3><div>{showData}</div>
+                {showDataBox ? <><h3>Results</h3><div className={styles.showDataBox}>{showData}</div></> : <></>}
             </div>
         </>
     )

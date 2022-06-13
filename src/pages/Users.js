@@ -33,7 +33,7 @@ function Users() {
         <>
             <h2 className={styles.heading}>Users</h2>
             <div className={styles.bodySpace}>
-                {state ? <Btn send={setState} /> : <TakeUser send={{ setState, changeShowDisplayDataBox }} />}
+                {state ? <Btn send={setState} /> : <TakeUser send={setState} />}
                 {showDisplayDataBox ? <div className={styles.displayDataBox}>{listNames}</div> : <></>}
             </div>
         </>
@@ -66,8 +66,7 @@ function TakeUser(props) {
         }
         else {
             dispatch(addUser({ name: inputData, id: Date.now() }));
-            props.send.setState(true);
-            props.send.changeShowDisplayDataBox(true);
+            props.send(true);
         }
     }
     return (
