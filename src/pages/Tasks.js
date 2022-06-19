@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react';
+import { useState, useEffect} from 'react';
 import EdiText from 'react-editext'
 import { useSelector, useDispatch } from 'react-redux';
 import { addTask, changeTask, deleteTask } from '../redux/dataReducer';
@@ -31,17 +31,22 @@ function Tasks() {
     const [filterState, setFilterState] = useState(false);
     const [updateData, setUpdateData] = useState(0);
     const [showDataBox,changeShowDataBox] = useState(false);
+    const [showNull,changeShowNull] = useState("");
     const data = useSelector((state) => state.getData.data);
     const dispatch = useDispatch();
     useEffect(() => {
         displayData();
     }, [updateData]);
     useEffect(() => {
-        if (data[location.state.index].tasks?.length > 0) changeShowDataBox(true);
+        changeDisplay();
     }, []);
     useEffect(() => {
-        data[location.state.index].tasks?.length > 0 ? changeShowDataBox(true) : changeShowDataBox(false);
-    }, [data]);
+        changeDisplay();
+    }, [showData]);
+    function changeDisplay(){
+        data[location.state.index].tasks?.length === 0 ? changeShowNull("No Task") : changeShowNull("No Result");
+        showData.length > 0 ? changeShowDataBox(true) : changeShowDataBox(false);
+    }
     function changeDataOnSave(value, index) {
         dispatch(changeTask({ userIndex: location.state.index, index: index, value: value }));
     }
@@ -83,7 +88,7 @@ function Tasks() {
                 {btnState ? <TaskBtn send={setBtnState} /> : <AddTask send={{ setBtnState, setUpdateData, updateData, setFilterState }} />}
                 {filterBtnState ? <FilterTaskBtn send={setFilterBtnState} /> : <SearchFilters send={{ setFilterBtnState, setFilterState, setUpdateData, updateData, inputFilter, setInputFilter }} />}
                 <button className={styles.btn} onClick={displayAll}>Display All</button>
-                {showDataBox ? <><h3>Results</h3><div className={styles.showDataBox}>{showData}</div></> : <></>}
+                {showDataBox ? <><h3>Results</h3><div className={styles.showDataBox}>{showData}</div></> : <h3>{showNull}</h3>}
             </div>
         </>
     )
