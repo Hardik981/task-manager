@@ -1,0 +1,59 @@
+.displayData {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.displayDataBox{
+     border: 1px solid black;
+}
+
+.displayData>* {
+    width: 150px;
+    margin: 10px 0;
+}
+
+.heading {
+    background-color: #0078d7;
+    color: #fff;
+    margin: 0 0 20px 0;
+    padding: 10px;
+}
+
+.bodySpace {
+    padding: 0 10%;
+}
+
+.addUsrBtn {
+    height: 36px;
+    background-color: lightgray;
+    margin-bottom: 10px;
+}
+
+.addUsrForm {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.addUsrLabel {
+    position: relative;
+    top: 5px;
+}
+
+.addUsrInput {
+    height: 30px;
+    width: 200px !important;
+    margin: 0 10px 10px 10px;
+}
+.addUsrSubmit {
+    height: 36px;
+    width: 120px !important;
+    margin: 0 10px 10px 10px;
+}
+
+@media only screen and (max-width:600px){
+    .bodySpace {
+        padding: 0 3%;
+    }
+}

@@ -1,24 +1,26 @@
 import './App.css';
-import { Users } from "./pages/Users";
-import { useState, createContext } from "react";
+import React, { Suspense } from 'react';
+import { store } from './redux/store';
+import { Provider } from 'react-redux';
 import { HashRouter, Routes, Route } from "react-router-dom";
-import { NoPage } from "./pages/NoPage";
-import { Tasks } from "./pages/Tasks";
-export const DataContext = createContext();
+const Users = React.lazy(() => import('./pages/Users'));
+const NoPage = React.lazy(() => import('./pages/NoPage'));
+const Tasks = React.lazy(() => import('./pages/Tasks'));
 function App() {
-  const [data, changeData] = useState([]);
   return (
-    <DataContext.Provider value={{data,changeData}}>
+    <Provider store={store}>
       <div className="App">
-        <HashRouter>
-          <Routes>
-            <Route path="/" element={<Users />} />
-            <Route path="/:id" element={<Tasks />} />
-            <Route path="*" element={<NoPage />} />
-          </Routes>
-        </HashRouter>
+        <Suspense fallback={<h1>...Loading</h1>}>
+            <HashRouter>
+              <Routes>
+                <Route path="/" element={<Users />} />
+                <Route path="/:id" element={<Tasks />} />
+                <Route path="*" element={<NoPage />} />
+              </Routes>
+            </HashRouter>
+        </Suspense>
       </div>
-    </DataContext.Provider>
+    </Provider>
   );
 }
 
