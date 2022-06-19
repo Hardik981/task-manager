@@ -14,7 +14,8 @@ export const dataReducer = createSlice({
     },
     addTask: (state,action) => {
       let temp = [...state.data];
-      temp[action.payload.userIndex].tasks.push({ taskName: action.payload.taskName, status: action.payload.status, dueDate: action.payload.dueDate, id: action.payload.id })
+      let dueDate = action.payload.dueDate === null ? 'Not Set' : action.payload.dueDate;
+      temp[action.payload.userIndex].tasks.push({ taskName: action.payload.taskName, status: action.payload.status, dueDate: dueDate, id: action.payload.id })
       state.data = [...temp];
     },
     changeTask: (state,action) => {
