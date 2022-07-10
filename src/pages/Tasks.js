@@ -85,8 +85,8 @@ function Tasks() {
         <>
             <h2 className={styles.heading}>{location?.state?.name} Task</h2>
             <div className={styles.bodySpace}>
-                {btnState ? <TaskBtn send={setBtnState} /> : <AddTask send={{ setBtnState, setUpdateData, updateData, setFilterState }} />}
-                {filterBtnState ? <FilterTaskBtn send={setFilterBtnState} /> : <SearchFilters send={{ setFilterBtnState, setFilterState, setUpdateData, updateData, inputFilter, setInputFilter }} />}
+                {btnState ? <TaskBtn send={setBtnState} name="Add Task" /> : <AddTask send={{ setBtnState, setUpdateData, updateData, setFilterState }} />}
+                {filterBtnState ? <TaskBtn send={setFilterBtnState} name="Filters" /> : <SearchFilters send={{ setFilterBtnState, setFilterState, setUpdateData, updateData, inputFilter, setInputFilter }} />}
                 <button className={styles.btn} onClick={displayAll}>Display All</button>
                 {showDataBox ? <><h3>Results</h3><div className={styles.showDataBox}>{showData}</div></> : <h3>{showNull}</h3>}
             </div>
@@ -97,13 +97,7 @@ function TaskBtn(props) {
     function changeState() {
         props.send(false);
     }
-    return <button className={styles.btn} onClick={changeState}>Add Task</button>;
-}
-function FilterTaskBtn(props) {
-    function changeState() {
-        props.send(false);
-    }
-    return <button className={styles.btn} onClick={changeState}>Filters</button>;
+    return <button className={styles.btn} onClick={changeState}>{props.name}</button>;
 }
 function AddTask(props) {
     const location = useLocation();
