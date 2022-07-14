@@ -1,73 +1,73 @@
 .heading {
-    background-color: #0078d7;
-    color: #fff;
-    margin: 0 0 20px 0;
-    padding: 10px;
+    background-color             : #0078d7;
+    color                        : #fff;
+    margin                       : 0 0 20px 0;
+    padding                      : 10px;
 }
 .showDataBox{
-    border:1px solid black;
+    border                       :1px solid black;
 }
 .bodySpace {
-    padding: 0 10%;
+    padding                      : 0 10%;
 }
 .input {
-    height: 30px;
-    width: 150px !important;
-    margin: 0 10px 10px 10px;
+    height                       : 30px;
+    width                        : 150px !important;
+    margin                       : 0 10px 10px 10px;
 }
 
 .select {
-    height: 30px;
-    margin: 0 10px;
-    margin-bottom: 10px;
+    height                       : 30px;
+    margin                       : 0 10px;
+    margin-bottom                : 10px;
 }
 
 .form {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
+    display                      : flex;
+    justify-content              : center;
+    flex-wrap                    : wrap;
+    margin-bottom                : 20px;
 }
 
 .displayData {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
+    display                      : flex;
+    flex-wrap                    : wrap;
+    justify-content              : space-evenly;
 }
 
 .displayData>* {
-    width: 150px;
-    margin: 10px 0;
+    width                        : 150px;
+    margin                       : 10px 0;
 }
 
 .btn {
-    margin: 0 5px 10px 5px;
-    height: 30px;
-    width: 100px;
-    background-color: lightgray;
+    margin                       : 0 5px 10px 5px;
+    height                       : 30px;
+    width                        : 100px;
+    background-color             : lightgray;
 }
 
 .clsBtn {
-    margin: 0 5px 10px 5px;
-    height: 30px;
-    width: 80px;
-    background-color: lightgray;
+    margin                       : 0 5px 10px 5px;
+    height                       : 30px;
+    width                        : 80px;
+    background-color             : lightgray;
 }
 
 .subBtn {
-    margin: 0 5px 10px 5px;
-    height: 30px;
-    width: 120px;
-    background-color: lightgray;
+    margin                       : 0 5px 10px 5px;
+    height                       : 30px;
+    width                        : 120px;
+    background-color             : lightgray;
 }
 
 .label {
-    position: relative;
-    top: 5px;
+    position                     : relative;
+    top                          : 5px;
 }
 
 @media only screen and (max-width:600px){
     .bodySpace {
-        padding: 0;
+        padding                  : 0;
     }
 }
