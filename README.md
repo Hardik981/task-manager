@@ -1,3 +1,13 @@
+## User's Task Manager Component Design
+```mermaid
+flowchart TD
+Users[Users] -.-> Btn[Btn]
+Users[Users] -.-> TakeUser[TakeUser]
+CheckTaskUrl[CheckTaskUrl] -.-> Tasks[Tasks]
+Tasks[Tasks] -.-> TaskBtn[TaskBtn]
+Tasks[Tasks] -.-> AddTask[AddTask]
+Tasks[Tasks] -.-> SearchFilters[SearchFilters]
+```
 ## User's Task Manager Routing Design
 ```mermaid
 flowchart TD
