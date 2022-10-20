@@ -1,4 +1,8 @@
-## User's Task Manager Component Design
+# Table of contents  
+1. [Component Design](#component_design)  
+2. [Routing Design](#routing_design)  
+3. [Definitions](#definitions) 
+## Component_Design
 ```mermaid
 flowchart TD
 Users[Users] -.-> Btn[Btn]
@@ -8,7 +12,7 @@ Tasks[Tasks] -.-> TaskBtn[TaskBtn]
 Tasks[Tasks] -.-> AddTask[AddTask]
 Tasks[Tasks] -.-> SearchFilters[SearchFilters]
 ```
-## User's Task Manager Routing Design
+## Routing_Design
 ```mermaid
 flowchart TD
     App[App] --> |/| User[User]

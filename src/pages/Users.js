@@ -14,7 +14,7 @@ function Users() {
     const listNames = data.map(function (arrData, index) {
 
         let sendData = {
-            name: arrData.name,
+            name : arrData.name,
             index: index
         }
 
